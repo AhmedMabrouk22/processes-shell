@@ -16,6 +16,7 @@ func isExecutable(mode os.FileMode) bool {
 }
 
 func ShowError() {
+
 	errorMessage := "An error has occurred\n"
 	_, err := os.Stderr.Write([]byte(errorMessage))
 	if err != nil {
@@ -175,8 +176,10 @@ func IsValid(command string) bool {
 }
 
 func ParallelCommand(input ...string) [][]string {
+
 	var tokens = make([][]string, 1)
 	pos := 0
+
 	for _, val := range input {
 
 		if val == "&" {
@@ -236,7 +239,9 @@ func ParseToken(input ...string) [][]string {
 
 func BatchMode(fileName string) {
 	file, err := os.Open(fileName)
+
 	if err != nil {
+
 		ShowError()
 		os.Exit(1)
 		return
@@ -250,9 +255,11 @@ func BatchMode(fileName string) {
 		command := scanner.Text()
 
 		command = strings.TrimSpace(command)
+
 		if len(command) == 0 {
 			continue
 		}
+
 		if !IsValid(command) {
 			ShowError()
 			continue
@@ -268,10 +275,39 @@ func BatchMode(fileName string) {
 
 }
 
-func main() {
+func InteractiveMode() {
+
 	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		fmt.Print("wish> ")
+		input, err := reader.ReadString('\n')
+		if err != nil {
+
+			ShowError()
+			continue
+		}
+
+		input = strings.TrimSpace(input)
+		if len(input) == 0 {
+			continue
+		}
+		if !IsValid(input) {
+
+			ShowError()
+			continue
+		}
+		tokens := ParseToken(strings.Split(input, " ")...)
+		ExecuteCommand(tokens)
+
+	}
+}
+
+func main() {
+
 	paths = append(paths, "/bin")
 
+	// batch mode work with one file
 	if len(os.Args) > 2 {
 		ShowError()
 		os.Exit(1)
@@ -284,24 +320,6 @@ func main() {
 		return
 	}
 
-	for {
-		fmt.Print("wish> ")
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			ShowError()
-			continue
-		}
+	InteractiveMode()
 
-		input = strings.TrimSpace(input)
-		if len(input) == 0 {
-			continue
-		}
-		if !IsValid(input) {
-			ShowError()
-			continue
-		}
-		tokens := ParseToken(strings.Split(input, " ")...)
-		ExecuteCommand(tokens)
-
-	}
 }
