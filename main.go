@@ -43,6 +43,7 @@ func HasRedirection(tokens ...string) (pos int, valid bool) {
 
 func ExternalCommand(wg *sync.WaitGroup, tokens ...string) {
 	defer wg.Done()
+
 	//check if this command has redirection command and it's valid
 	pos, valid := HasRedirection(tokens...)
 	if !valid || (pos != -1 && pos == len(tokens)-1) {
@@ -58,6 +59,7 @@ func ExternalCommand(wg *sync.WaitGroup, tokens ...string) {
 	if exist == true {
 		args := tokens[1:pos]
 		cmd := exec.Command(path, args...)
+
 		if pos != len(tokens) {
 			outFile, err := os.Create(tokens[pos+1])
 			if err != nil {
@@ -75,12 +77,14 @@ func ExternalCommand(wg *sync.WaitGroup, tokens ...string) {
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 		}
+
 		err := cmd.Start()
 		if err != nil {
 			ShowError()
 			return
 		}
 		err = cmd.Wait()
+
 	} else {
 		ShowError()
 	}
@@ -139,6 +143,7 @@ func ExecuteCommand(cmd [][]string) {
 	//	Check if the command is built-in command
 	//	if yes -> execute it
 	//	if no -> search on paths and check if the command exist or not
+
 	var wg sync.WaitGroup
 	for _, tokens := range cmd {
 		if len(tokens) == 0 {
@@ -157,11 +162,13 @@ func ExecuteCommand(cmd [][]string) {
 			go ExternalCommand(&wg, tokens...)
 		}
 	}
+
 	wg.Wait()
 }
 
 func IsValid(command string) bool {
 	input := strings.ReplaceAll(command, " ", "")
+
 	if input[0] == '>' || input[len(input)-1] == '>' {
 		return false
 	}
@@ -264,12 +271,15 @@ func BatchMode(fileName string) {
 			ShowError()
 			continue
 		}
+
 		tokens := ParseToken(strings.Split(command, " ")...)
 		ExecuteCommand(tokens)
 
 	}
 
-	if err := scanner.Err(); err != nil {
+	err = scanner.Err()
+
+	if err != nil {
 		ShowError()
 	}
 
