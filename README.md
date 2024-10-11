@@ -13,8 +13,6 @@ Key features include process creation, redirection, parallel execution, and buil
 
 You can find more details about the original project on the [OSTEP Projects](https://github.com/remzi-arpacidusseau/ostep-projects/tree/master/processes-shell).
 
------------------------------------
-
 ## Main Functions
 **1. Command Parsing**
 - The shell reads input from the user (interactive mode) or from a file (batch mode).
@@ -35,8 +33,6 @@ You can find more details about the original project on the [OSTEP Projects](htt
 **5. Parallel Commands**
 - Users can execute multiple commands in parallel by separating them with `&`. The shell runs these commands simultaneously and waits for all of them to finish before continuing.
 
--------
-
 ## Usage
 
 ### Running in Interactive Mode
@@ -53,13 +49,10 @@ To run the shell with a batch file:
 ```
 This reads commands from `batch.txt` and executes them.
 
---------------------------
-
 ## Testing
 
 ```shell
 ./test-wish.sh
 ```
-
-![Screenshot from 2024-10-11 04-29-30.png](..%2F..%2F..%2F..%2F..%2F..%2F..%2Fhome%2Fa_m_s%2FPictures%2FScreenshots%2FScreenshot%20from%202024-10-11%2004-29-30.png)
+![Screenshot from 2024-10-11 04-29-30](https://github.com/user-attachments/assets/e6c98210-1800-4a7d-a3fe-199f84cdb92e)
 
